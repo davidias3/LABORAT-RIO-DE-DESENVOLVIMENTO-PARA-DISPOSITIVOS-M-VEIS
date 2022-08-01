@@ -1,0 +1,106 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const myApp());
+}
+
+class myApp extends StatelessWidget {
+  const myApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: "AppDivideConta",
+      home: homePage(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class homePage extends StatefulWidget {
+  const homePage({Key? key}) : super(key: key);
+
+  @override
+  State<homePage> createState() => _homePageState();
+}
+
+class _homePageState extends State<homePage> {
+  final _tValorTotal = TextEditingController();
+  final _tNumeropessoas = TextEditingController();
+  final _tComissao = TextEditingController();
+  var infoText = "Informe seus dados";
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("App Divide Conta"),
+        centerTitle: true,
+      ),
+      body: body(),
+    );
+  }
+
+  body() {
+    return Container(
+      padding: EdgeInsets.all(30),
+      child: Form(
+        child: Column(
+          children: [
+            TextFormField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: "Valor Total da Conta: "),
+              controller: _tValorTotal,
+            ),
+            TextFormField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                  labelText:
+                      "Quantidade de pessoas que irão dividir a conta: "),
+              controller: _tNumeropessoas,
+            ),
+            TextFormField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                  labelText: "Qual a % de comissão designada ao garçom ?"),
+              controller: _tComissao,
+            ),
+            ElevatedButton(
+              onPressed: calcular,
+              child: Text("Calcular"),
+            ),
+            Text(
+              infoText,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  calcular() {
+    setState(() {
+      double Valortotal = double.parse(_tValorTotal.text);
+      double Numeropessoas = double.parse(_tNumeropessoas.text);
+      double Comissao = double.parse(_tComissao.text);
+      double valorindividual = Valortotal / Numeropessoas;
+      double comissao = valorindividual * Comissao / 100;
+      double valorfinalcomissao = comissao + valorindividual;
+      infoText = "\n" +
+          "\n" "Valor Individual: " +
+          " R\$" +
+          valorindividual.toStringAsFixed(2) +
+          "\n" +
+          "\n" +
+          "Comissão do garçom: " +
+          " R\$" +
+          comissao.toStringAsFixed(2) +
+          "\n" +
+          "\n" +
+          "Valor Total: " +
+          " R\$" +
+          valorfinalcomissao.toStringAsFixed(2);
+    });
+  }
+}
